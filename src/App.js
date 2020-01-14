@@ -16,6 +16,7 @@ function App() {
         <Router>
           <Route path="/vote/:baseId" component={Vote} />
           <Route exact path="/" component={Landing} />
+          {/* <Route exact path="*" component={()=><div className='flex jcc mt20 fs3'>Page Not Found</div>} /> */}
         </Router>
       </Toast>
     </GlobalWrapper>

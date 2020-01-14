@@ -88,6 +88,7 @@ function Vote({match}) {
     }
   }, {})
   const handleCategoryChange = ({category,value}) => {
+    // allo for current category
     const currentAllo = Number(categoryAllos[category]) || 0
     const hypotheticalTotal = total - currentAllo + value
     const isDecreasing = value < currentAllo
@@ -103,6 +104,12 @@ function Vote({match}) {
         ...allos, 
         ...newAllos
       })
+    } else if (!isLessThanTotal) {
+      const remainingBalance = totalBudget - currentAllo
+      // console.log('totalBudget', totalBudget, currentAllo)
+      // console.log('total', total)
+      // console.log('currentAllo', currentAllo)
+      // console.log('hypotheticalTotal', hypotheticalTotal, totalBudget)
     }
   }
   // CATEGORY END
@@ -145,6 +152,7 @@ function Vote({match}) {
   //   }
   // }
   const remainingBalance = decimalIfExists(totalBudget - total)
+  // console.log('remainingBalance: ', remainingBalance, total, Object.values(allos));
   // const oneday = 60 * 60 * 24 * 1000
   // const dayInPast = Date.now() - oneday
   // const hasVotedInPast24Hours = (dayInPast < user.lastVoteTimestamp)
@@ -153,17 +161,13 @@ function Vote({match}) {
     return null
   }
   const canVote = Boolean(user.lastVoteVersion !== config.version)
-    return user.voted || !canVote 
-    ? <Thankyou {...user} /> 
-    : <div className="App tac">
-      <div className='flex jcc aic column mt30'>
-      <img 
-        className="mb30 mr10"
-        src={logo} 
-        width='200px' 
-        alt="logo" 
-      />
-      <Popup 
+    return user.voted || !canVote ? (
+      <Thankyou {...user} />
+    ) : (
+      <div className="App tac">
+        <div className="flex jcc aic column mt30">
+          <img className="mb30 mr10" src={logo} width="200px" alt="logo" />
+          {/* <Popup 
         position='bottom center'
         hideOnScroll
         content={`
@@ -173,29 +177,39 @@ function Vote({match}) {
           We attributed ${votesPerSnack} voice credit for each snack, 
           which adds up to ${snacks.length * votesPerSnack} voice credits. 
         `} 
-        trigger={<div>
-          you have 
-            <span className='fs1 relative'>
-            {remainingBalance}
-          <Icon 
+        trigger={
+         */}
+          <div className="mb50 flex aic column">
+            <div className="fs14 w300 mb10">
+              <div className="txtGray">
+                What is your{" "}
+                <Highlight color="green" textColor="black">
+                  favorite
+                </Highlight>{" "}
+                kind of snack? We
+                attributed {votesPerSnack} voice credit for each snack, which
+                adds up to {snacks.length * votesPerSnack} voice credits.  Vote on your favorites below! The
+                information gathered may or may not impact snack options --
+                budget wisely 🤔
+              </div>
+            </div>
+            <div>
+              you have
+              <span className="fs1 relative">
+                {remainingBalance}
+                {/* <Icon 
                 name="question circle" 
                 className='absolute right-20 top0 fs12 txtPurple opacity5' 
-            />
-            </span>
-          voice credits
-          <div className='mb20'> to vote with on the following snacks </div>
-        </div>} 
-      />
-      <div className='mb50'>
-          {remainingBalance 
-          ? <><div className='fs14 txtGray'> The information gathered may or <Highlight color='green'>may not</Highlight> </div>
-            <div className='fs14 txtGray mb5'>impact snack options -- budget wisely 🤔</div></>
-          : <p className='fs16 mb30'>🥳thank you 🥳</p>
-        }
+            /> */}
+              </span>
+              voice credits
+              <div className="mb20"> to vote with on the following snacks </div>
+            </div>
+            {/* }/> */}
+          </div>
         </div>
-      </div>
-      <div className='flex aic column'>
-      {/* {snacks.map(snack => <div key={snack.id} className='w300 tal'>
+        <div className="flex aic column">
+          {/* {snacks.map(snack => <div key={snack.id} className='w300 tal'>
           <Typography>{snack.title}</Typography>
           <Slider
             id={snack.id}
@@ -208,34 +222,46 @@ function Vote({match}) {
             getAriaValueText={() => 'input'}
           /> 
       </div> )} */}
-      {Object.entries(categories).map(([category, snacks]) => <div key={category} className='w300 tal mb20'>
-          <Typography variant='h6'>{category}</Typography>
-          <Typography variant='body2' className='fs-10 txtGray'>{snacks.map((snack, i)=> `${i !== 0 ? ',' : ''} ${snack.title}`)}</Typography>
-          <Slider
-            id={category}
-            name={category}
-            max={totalBudget}
-            step={1}
-            valueLabelDisplay='auto'
-            value={decimalIfExists(categoryAllos[category] || 0)}
-            onChange={(e, value) => handleCategoryChange({ category, value })}
-            getAriaValueText={() => 'input'}
-          /> 
-      </div>)}
+          {Object.entries(categories).map(([category, snacks]) => (
+            <div key={category} className="w300 tal mb20">
+              <Typography variant="h6">{category}</Typography>
+              <Typography variant="body2" className="fs-10 txtGray">
+                {snacks.map(
+                  (snack, i) => `${i !== 0 ? "," : ""} ${snack.title}`
+                )}
+              </Typography>
+              <Slider
+                id={category}
+                name={category}
+                max={totalBudget}
+                step={1}
+                valueLabelDisplay="auto"
+                value={decimalIfExists(categoryAllos[category] || 0)}
+                onChange={(e, value) =>
+                  handleCategoryChange({ category, value })
+                }
+                getAriaValueText={() => "input"}
+              />
+            </div>
+          ))}
         </div>
-      <div className='mt30 mb50 w100p'>
-        <Button 
-          variant="contained" 
-          color="primary"
-          onClick={onSubmit}
-          >
+        <div className="mt30 mb50 w100p">
+          <Button variant="contained" color="primary" onClick={onSubmit}>
             Send Snack Feedback
           </Button>
+        </div>
+        <small className="fs10 w300 txtGray">
+          Thanks for helping make Wayfair a great place to work and snack{" "}
+        </small>
+        <p className="mb20">🙇‍♂️</p>
+        <div
+          onClick={showTerms}
+          className="fs10 w300 txtBlue pointer underline mb50"
+        >
+          terms and conditions
+        </div>
       </div>
-      <small className='fs10 w300 txtGray'>Thanks for helping make Wayfair a great place to work and snack </small>
-      <p className='mb20'>🙇‍♂️</p>
-      <div onClick={showTerms} className='fs10 w300 txtBlue pointer underline mb50'>terms and conditions</div>
-    </div>
+    );
 }
 
 export default withRouter(Vote);
