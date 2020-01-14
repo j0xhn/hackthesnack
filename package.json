@@ -1,6 +1,6 @@
 {
   "name": "app",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "dependencies": {
     "@material-ui/core": "^4.2.1",
@@ -23,7 +23,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "deploy": "npm run build && mv build/index.html build/200.html && surge ./build --domain snackfeedback.surge.sh ",
+    "deploy": "npm run build && mv build/index.html build/200.html && surge ./build --domain hackthesnack.surge.sh ",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
