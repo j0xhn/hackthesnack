@@ -1,6 +1,5 @@
 /* eslint-disable jsx-a11y/accessible-emoji */
 import React, { useState, useContext, useEffect } from "react";
-import JsxParser from "react-jsx-parser";
 import { withRouter } from "react-router-dom";
 import Airtable from "airtable";
 import logo from "../static/images/logo.png";
@@ -14,7 +13,7 @@ import Button from "@material-ui/core/Button";
 import { chunk } from "lodash";
 import { shuffle, mapAirtableValues, decimalIfExists } from "../utils";
 import Thankyou from "../routes/thankyou";
-import { ToastContext, Highlight } from "../components";
+import { ToastContext } from "../components";
 import { useGlobalState } from "../stores/global";
 
 function Vote({ match }) {
@@ -168,11 +167,15 @@ function Vote({ match }) {
     return null;
   }
   const canVote = Boolean(user.lastVoteVersion !== config.version);
-  return user.voted || !canVote || true ? (
+  return user.voted || !canVote ? (
     <Thankyou
       {...user}
       message={
-        <JsxParser components={{ Highlight }} jsx={config.thankYouText} />
+        <div dangerouslySetInnerHTML={{ __html: config.thankYouText }} />
+        // <JsxParser
+        //   components={{ Highlight }}
+        //   jsx={config.thankYouText || null}
+        // />
       }
     />
   ) : (
@@ -182,7 +185,11 @@ function Vote({ match }) {
         <div className="mb50 flex aic column">
           <div className="fs14 w300 mb10">
             <div className="txtGray">
-              <JsxParser components={{ Highlight }} jsx={config.welcomeText} />
+              <div dangerouslySetInnerHTML={{ __html: config.welcomeText }} />
+              {/* <JsxParser
+                  components={{ Highlight }}
+                  jsx={config.welcomeText || null}
+                /> */}
             </div>
           </div>
           <div>

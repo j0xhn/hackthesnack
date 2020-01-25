@@ -24,7 +24,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "deploy": "npm run build && mv build/index.html build/200.html && surge ./build --domain hackthesnack.surge.sh ",
+    "deploy": "npm run build && cp build/index.html build/200.html && surge ./build --domain hackthesnack.surge.sh ",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
