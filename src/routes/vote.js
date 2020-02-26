@@ -128,16 +128,16 @@ function Vote({ match }) {
   // CATEGORY END
 
   const onSubmit = () => {
-    console.log("match.params.location", match.params.location);
+    const { location, baseId } = match.params;
     const base = new Airtable({
       apiKey: process.env.REACT_APP_AIRTABLE_KEY
-    }).base(match.params.baseId);
+    }).base(baseId);
     base("votes").create(
       {
         uid: user.uid,
         meta: JSON.stringify({
           version: config.version,
-          location: match.params.location
+          ...(location && { location })
         }),
         votes: JSON.stringify(allos)
       },
