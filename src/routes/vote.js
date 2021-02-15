@@ -128,13 +128,17 @@ function Vote({ match }) {
   // CATEGORY END
 
   const onSubmit = () => {
+    const { location, baseId } = match.params;
     const base = new Airtable({
       apiKey: process.env.REACT_APP_AIRTABLE_KEY
-    }).base(match.params.baseId);
+    }).base(baseId);
     base("votes").create(
       {
         uid: user.uid,
-        meta: JSON.stringify({ version: config.version }),
+        meta: JSON.stringify({
+          version: config.version,
+          ...(location && { location })
+        }),
         votes: JSON.stringify(allos)
       },
       function(err, record) {
@@ -187,9 +191,9 @@ function Vote({ match }) {
             <div className="txtGray">
               <div dangerouslySetInnerHTML={{ __html: config.welcomeText }} />
               {/* <JsxParser
-                  components={{ Highlight }}
-                  jsx={config.welcomeText || null}
-                /> */}
+                components={{ Highlight }}
+                jsx={config.welcomeText || null}
+              /> */}
             </div>
           </div>
           <div>
